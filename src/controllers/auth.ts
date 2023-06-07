@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import mongoose from "mongoose";
 import User from "../models/User";
 import { IUser } from '../interfaces/user';
 import jwt from "jsonwebtoken";
@@ -41,7 +40,9 @@ export const signup = async (req: Request, res: Response): Promise<Response> => 
             email,
             password: hashedPassword,
         });
-        const token = jwt.sign({ _id: user._id }, "123456");
+        const token = jwt.sign({ _id: user._id }, "123456", {
+            expiresIn: "1d",
+          });
 
         return res.status(201).json({
             message: "Đăng ký thành công",
@@ -68,7 +69,7 @@ export const signin = async (req: Request, res: Response) => {
                 message: errors,
             });
         }
-        const user: IUser = await User.findOne({ email });
+        const user: IUser | null = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({ message: "Tài khoản không tồn tại" });
         }
@@ -80,8 +81,6 @@ export const signin = async (req: Request, res: Response) => {
         }
 
         const token = jwt.sign({ _id: user._id }, "123456");
-
-        user.password = undefined;
 
         res.status(200).json({
             message: "Đăng nhập thành công",
