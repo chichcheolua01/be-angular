@@ -1,7 +1,9 @@
+import { Category } from "../models/Category";
 import { Post } from "../models/Post";
 import { postSchema } from "../schemas/post";
+import { Request, Response } from "express";
 
-export const getPosts = async (req, res) => {
+export const getPosts = async (req: Request, res: Response) => {
   try {
     const posts = await Post.find();
     return res.status(200).json({ message: "Đã tìm thấy bài viết!", posts });
@@ -10,7 +12,7 @@ export const getPosts = async (req, res) => {
   }
 };
 
-export const getPost = async (req, res) => {
+export const getPost = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     const post = await Post.findById(id);
@@ -20,7 +22,7 @@ export const getPost = async (req, res) => {
   }
 };
 
-export const createPost = async (req, res) => {
+export const createPost = async (req: Request, res: Response) => {
   try {
     const body = await req.body;
     const { error } = postSchema.validate(body, { abortEarly: false });
@@ -29,6 +31,11 @@ export const createPost = async (req, res) => {
       return res.status(400).json({ message: errors });
     }
     const post = await Post.create(body);
+    await Category.findByIdAndUpdate(post.categoryId, {
+      $addToSet: {
+        posts: post._id,
+      },
+    });
     if (!post) {
       return res.status(400).json({ message: "Tạo post không thành công!" });
     }
@@ -38,7 +45,7 @@ export const createPost = async (req, res) => {
   }
 };
 
-export const removePost = async (req, res) => {
+export const removePost = async (req: Request, res: Response) => {
   try {
     const id = await req.params.id;
     const deletedPost = await Post.findByIdAndDelete(id);
@@ -50,7 +57,7 @@ export const removePost = async (req, res) => {
   }
 };
 
-export const updatePost = async (req, res) => {
+export const updatePost = async (req: Request, res: Response) => {
   try {
     const id = await req.params.id;
     const body = await req.body;
