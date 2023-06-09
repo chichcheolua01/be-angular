@@ -14,6 +14,10 @@ const categoryShema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    path: {
+      type: String,
+      required: true,
+    },
     posts: [{ type: mongoose.Types.ObjectId, ref: "Post" }],
   },
   { timestamps: true, versionKey: false }

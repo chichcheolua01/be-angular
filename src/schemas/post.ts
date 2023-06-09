@@ -13,6 +13,10 @@ export const postSchema = Joi.object({
     "string.empty": "Bạn chưa nhập tên tác giả!",
     "any.required": "Bạn chưa nhập tên tác giả!",
   }),
+  image: Joi.string().required().messages({
+    "string.empty": "Bạn chưa nhập tên tác giả!",
+    "any.required": "Bạn chưa nhập tên tác giả!",
+  }),
   categoryId: Joi.string().required().messages({
     "string.empty": "Bạn chưa nhập thể loại!",
     "any.required": "Bạn chưa nhập thể loại!",
