@@ -16,7 +16,6 @@ export const authenticate = async (
     const authHeader = req.headers.authorization;
     if (!authHeader)
       throw new Error("Bạn phải đăng nhập để thực hiện hành động này");
-
     const token = authHeader && (authHeader.split(" ")[1] as string);
     const { _id }: any = jwt.verify(token, "123456");
 
@@ -29,6 +28,6 @@ export const authenticate = async (
 
     next();
   } catch (error) {
-    res.status(401).json({ message: error.message });
+    return res.status(401).json({ message: error.message });
   }
 };
