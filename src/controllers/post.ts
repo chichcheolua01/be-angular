@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 
 export const getPosts = async (req: Request, res: Response) => {
   try {
-    const posts = await Post.find().populate("CategoryId");
+    const posts = await Post.find().populate("categoryId");
     return res.status(200).json({ message: "Đã tìm thấy bài viết!", posts });
   } catch (error) {
     return res.status(400).json({ message: error.message });
