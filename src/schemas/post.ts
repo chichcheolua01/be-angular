@@ -21,6 +21,8 @@ export const postSchema = Joi.object({
     "string.empty": "Bạn chưa nhập thể loại!",
     "any.required": "Bạn chưa nhập thể loại!",
   }),
+  createdAt: Joi.date().default(() => new Date()),
+  updatedAt: Joi.date().default(() => new Date()),
 });
 
 //   title: {
